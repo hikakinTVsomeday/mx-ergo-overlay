@@ -1,0 +1,60 @@
+{
+  "apps": {
+    "chrome.exe": {
+      "app_name": "Google Chrome",
+      "up": "新しいタブ",
+      "down": "タブを閉じる",
+      "left": "戻る",
+      "right": "進む"
+    },
+    "msedge.exe": {
+      "app_name": "Microsoft Edge",
+      "up": "新しいタブ",
+      "down": "タブを閉じる",
+      "left": "戻る",
+      "right": "進む"
+    },
+    "firefox.exe": {
+      "app_name": "Firefox",
+      "up": "新しいタブ",
+      "down": "タブを閉じる",
+      "left": "戻る",
+      "right": "進む"
+    },
+    "excel.exe": {
+      "app_name": "Microsoft Excel",
+      "up": "行の挿入",
+      "down": "行の削除",
+      "left": "元に戻す",
+      "right": "やり直し"
+    },
+    "winword.exe": {
+      "app_name": "Microsoft Word",
+      "up": "段落の挿入",
+      "down": "段落の削除",
+      "left": "元に戻す",
+      "right": "やり直し"
+    },
+    "code.exe": {
+      "app_name": "VS Code",
+      "up": "定義へ移動",
+      "down": "参照を検索",
+      "left": "戻る",
+      "right": "進む"
+    },
+    "explorer.exe": {
+      "app_name": "エクスプローラー",
+      "up": "新しいウィンドウ",
+      "down": "削除",
+      "left": "戻る",
+      "right": "進む"
+    },
+    "default": {
+      "app_name": "Global",
+      "up": "タスクビュー",
+      "down": "デスクトップ表示",
+      "left": "戻る",
+      "right": "進む"
+    }
+  }
+}

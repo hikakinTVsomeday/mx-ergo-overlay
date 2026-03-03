@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# Debug output files
+*.txt
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# Agent config
+.agent/
+.agents/
