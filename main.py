@@ -8,6 +8,13 @@ GUI ウィンドウの ON/OFF ボタンでオーバーレイを表示する。
 import logging
 import os
 import sys
+
+# pythonw実行時にstdout/stderrがないことによるクラッシュを防ぐ
+if sys.stdout is None:
+    sys.stdout = open(os.devnull, 'w')
+if sys.stderr is None:
+    sys.stderr = open(os.devnull, 'w')
+
 import tkinter as tk
 from tkinter import font as tkfont
 
@@ -24,9 +31,17 @@ LOG_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "overlay_deb
 logger = logging.getLogger("overlay")
 logger.setLevel(logging.DEBUG)
 
-_fh = logging.FileHandler(LOG_FILE, encoding="utf-8", mode="w")
+_fh = logging.FileHandler(LOG_FILE, encoding="utf-8", mode="a")
 _fh.setFormatter(logging.Formatter("%(asctime)s [%(levelname)s] %(message)s", datefmt="%H:%M:%S"))
 logger.addHandler(_fh)
+
+def handle_exception(exc_type, exc_value, exc_traceback):
+    if issubclass(exc_type, KeyboardInterrupt):
+        sys.__excepthook__(exc_type, exc_value, exc_traceback)
+        return
+    logger.error("Uncaught exception", exc_info=(exc_type, exc_value, exc_traceback))
+
+sys.excepthook = handle_exception
 
 # ── 定数 ──────────────────────────────────────────────────
 
@@ -55,7 +70,7 @@ class GestureOverlayApp:
         # settings.db からプロファイル読み込み
         self._profiles = load_all_profiles()
         if not self._profiles:
-            print("[WARN] settings.db からプロファイルを読み込めませんでした。")
+            logger.warning("settings.db からプロファイルを読み込めませんでした。")
 
         self._overlay_visible = False
 
@@ -331,9 +346,9 @@ class GestureOverlayApp:
     def _reload_settings(self):
         try:
             self._profiles = load_all_profiles()
-            print("[INFO] settings.db を再読み込みしました。")
+            logger.info("settings.db を再読み込みしました。")
         except Exception as e:
-            print(f"[ERROR] 再読み込みに失敗: {e}")
+            logger.error(f"再読み込みに失敗: {e}")
 
     def _on_close(self):
         self._root.withdraw()
@@ -347,11 +362,11 @@ class GestureOverlayApp:
     # ── 起動 ──────────────────────────────────────────────
 
     def run(self):
-        print("MX Ergo Gesture Overlay を起動しました。")
-        print("settings.db から設定を読み込みました。")
+        logger.info("MX Ergo Gesture Overlay を起動しました。")
+        logger.info("settings.db から設定を読み込みました。")
         for exe, prof in self._profiles.items():
-            print(f"  {prof.app_name} ({exe}): {len(prof.buttons)} ボタン")
-        print("ON中はアクティブアプリが変わると自動でジェスチャーが切り替わります。")
+            logger.info(f"  {prof.app_name} ({exe}): {len(prof.buttons)} ボタン")
+        logger.info("ON中はアクティブアプリが変わると自動でジェスチャーが切り替わります。")
 
         self._root.after(500, self._poll_active_window)
         self._tray.start()
